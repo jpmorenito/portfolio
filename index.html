@@ -8,13 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display+SC:wght@400;700&display=swap" rel="stylesheet">
     
     <link rel="icon" href="img/logo.png" type="image/png"> 
-
 </head>
 <body>
     
+    <div id="copy-notification" class="copy-notification">¡Correo copiado al portapapeles!</div>
+
     <header>
         <div class="container header-container"> 
-            
             <a href="#" class="brand-link">
                 <div class="brand-logo"> 
                     <img src="img/logo.png" alt="Logo JPM" class="header-logo"> 
@@ -46,23 +46,21 @@
             <h3 class="section-title">SOBRE MÍ</h3> 
             
             <div class="about-flex">
-                
                 <div class="about-text">
                     <p>
-                        Soy Jacob Pino, Ingeniero Informático 💻 con una profunda orientación hacia la ciberseguridad. Mi fascinación reside en el dinámico mundo del hacking ético y la protección de sistemas, buscando siempre entender cómo se detectan y neutralizan las amenazas digitales.
+                        Soy **Jacob Pino**, Ingeniero Informático (💻) con una profunda orientación hacia la **Ciberseguridad**. Mi fascinación reside en el dinámico mundo del **hacking ético** y la **protección de sistemas**, buscando siempre entender cómo se detectan y neutralizan las amenazas digitales.
                     </p>
                     <p>
-                        Mi formación técnica se complementa con un enfoque activo en la detección y prevención de vulnerabilidades 🛡️. Actualmente, me encuentro en una fase de intensa especialización 📚, cursando diversos programas avanzados en ciberseguridad defensiva y ofensiva.
+                        Mi formación técnica se complementa con un enfoque activo en la **detección y prevención de vulnerabilidades** (🛡️). Actualmente, me encuentro en una fase de intensa especialización (📚), cursando diversos programas avanzados en ciberseguridad defensiva y ofensiva.
                     </p>
                     <p>
-                        Mi objetivo inmediato es validar este conocimiento a través de certificaciones clave de la industria 🏅, preparándome para ofrecer servicios profesionales y soluciones de seguridad robustas dentro de este campo.
+                        Mi objetivo inmediato es validar este conocimiento a través de **certificaciones clave de la industria** (🏅), preparándome para ofrecer **servicios profesionales y soluciones de seguridad robustas** dentro de este campo.
                     </p>
                 </div>
 
                 <div class="about-visuals">
                     <img src="img/mifoto.png.png" alt="Jacob Pino Moreno" class="profile-pic">
                 </div>
-
             </div>
         </div>
     </section>
@@ -99,7 +97,7 @@
                         <div class="block-icon">📧</div> 
                         <h4>CONTACTO DIRECTO</h4>
                     </div>
-                    <p>Correo: <a href="mailto:jacobpinomo@gmail.com">jacobpinomo@gmail.com</a></p>
+                    <p>Correo: <span class="email-link email-copy" onclick="copiarCorreo('jacobpinomo@gmail.com')">jacobpinomo@gmail.com</span></p>
                 </div>
 
                 <div class="data-block">
@@ -148,7 +146,7 @@
                 <div class="skill-card">
                     <div class="icon-box">📜</div>
                     <h4>JavaScript</h4>
-                    <p>Desarrollo seguro y auditoría de aplicaciones web, con enfoque en la prevención de vulnerabilidades.</p>
+                    <p>Desarrollo seguro y auditoría de aplicaciones web modernas (frontend y backend Node.js), con foco en la prevención de vulnerabilidades.</p>
                 </div>
                 
                 <div class="skill-card">
@@ -191,7 +189,7 @@
             <p class="contact-prompt">Contáctame a través de:</p>
             <div class="contact-info">
                 <span class="icon-envelope">✉️</span> 
-                <a href="mailto:jacobpinomo@gmail.com" class="email-link">jacobpinomo@gmail.com</a>
+                <span class="email-link email-copy" onclick="copiarCorreo('jacobpinomo@gmail.com')">jacobpinomo@gmail.com</span>
             </div>
         </div>
     </section>
@@ -201,6 +199,54 @@
             <p>&copy; 2025 Jacob Pino Moreno. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <script>
+        function copiarCorreo(correo) {
+            // Intento 1: API Moderna (Clipboard API)
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(correo).then(() => {
+                    mostrarNotificacion();
+                }).catch(err => {
+                    console.error("Fallo API moderna, usando fallback: ", err);
+                    copiarCorreoFallback(correo); 
+                });
+            } else {
+                // Intento 2: Método de respaldo (Funciona offline/archivos locales)
+                copiarCorreoFallback(correo);
+            }
+        }
+
+        function copiarCorreoFallback(correo) {
+            const textArea = document.createElement("textarea");
+            textArea.value = correo;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                mostrarNotificacion();
+            } catch (err) {
+                console.error('Error al copiar', err);
+                alert("No se pudo copiar automáticamente. Tu correo es: " + correo);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function mostrarNotificacion() {
+            var notificacion = document.getElementById("copy-notification");
+            notificacion.classList.remove("show");
+            void notificacion.offsetWidth; // Reiniciar animación
+            notificacion.classList.add("show");
+            
+            setTimeout(function() { 
+                notificacion.classList.remove("show"); 
+            }, 3000);
+        }
+    </script>
 
 </body>
 </html>
